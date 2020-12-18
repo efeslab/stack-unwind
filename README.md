@@ -38,3 +38,24 @@ For benchmarking with YCSB, please check out [ycsb.md](/ycsb.md).
 ### Clang
 
 * Follow [this guide](https://clang.llvm.org/get_started.html) to build clang properly.
+
+### GCC
+
+* Refer to Tanvir's "[C++ systems and their benchmarks of performance evaluation](https://docs.google.com/document/d/1ZPYYSQDf_syft2VQtuxxrqCUNiB0f13dusvcjo6KAoc/edit?ts=5f53dda7)" on how to build GCC from source.
+* Before running `./configure`, modify it to add the compile flags you need.
+
+### RocksDB
+
+* Follow [this guide](https://github.com/facebook/rocksdb/blob/master/INSTALL.md) to compile RocksDB
+* Edit the compile flags by editing `./Makefile`, and use the `PREFIX` to mark the installation directory.
+* Build only the static library via `make static_lib`, as other `make` commands install other, unnecessary tools.
+* To better compare stack-unwinding performance impacts on RocksDB against other NoSQL database applications, we recommend using the YCSB benchmark for RocksDB as opposed to its own benchmarking program.
+
+### FFmpeg
+
+* Download and unzip [vbench](http://arcade.cs.columbia.edu/vbench/). 
+* In the top directory, run `export VBENCH_ROOT=$(pwd)`
+* Run `./install-reference-ffmpeg.sh` for vbench to download all the repositories necessary to build FFmpeg.
+* For each new build of FFmpeg, delete or rename the existing `./bin/ffmpeg`, modify `./ffmpeg_sources/ffmpeg/configure` to add compile flags, and then re-run `./install-reference-ffmpeg.sh`
+* To create a benchmark, modify the "perform transcoding" section of `./code/reference.py` to include a for-loop and a filter for whichever video files (found in `./crf0` and `./crf18`) you would like to transcode.
+* Then, run the benchmark script with `python code/reference.py scenario` where `scenario` can be any of the following: `live`, `upload`, `platform`, `popular`, or `vod`
